@@ -34,7 +34,7 @@ val apiServicesKoinModule = module {
     }
 
     single<CoinsAPI> {
-        val okkHttpClient = OkHttpClient.Builder()
+        val okkHttpClient = getOkHttpClientBuilder()
             .addInterceptor(get<ChuckerInterceptor>()).build()
 
         val retroift = Retrofit.Builder()

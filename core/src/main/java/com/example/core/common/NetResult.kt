@@ -11,16 +11,16 @@ sealed class NetResult<out T> {
     object Loading : NetResult<Nothing>()
     data class Success<T>(val data: T) : NetResult<T>()
 
-    sealed class Error(val exception: Exception) : NetResult<Nothing>() {
-        object NetworkError : Error(Exceptions.NetworkException())
-        object EmptyResponse : Error(Exceptions.EmptyResponseException())
-        data class ServerError(val message: String? = null) : Error(Exceptions.ServerException(message))
-        data class RequestError(val message: String? = null) : Error(Exceptions.RequestErrorException(message))
+    sealed class Error() : NetResult<Nothing>() {
+        object NetworkError : Error()
+        object EmptyResponse : Error()
+        data class ServerError(val message: String? = null) : Error()
+        data class RequestError(val message: String? = null) : Error()
 
         data class Failure(
             val message: String? = null,
             val statusCode: Int? = null
-        ) : Error(Exceptions.FailureException(message))
+        ) : Error()
     }
 
     fun isSuccess(): Boolean = this is Success
@@ -161,11 +161,3 @@ inline fun <V1 : Any, reified V2 : Any> NetResult<V1>.flatZip(f: (V1) -> NetResu
             f(data).map { data to (it) }
         }
     }
-
-@FlowPreview
-fun <T: Any, R: Any> Flow<T>.flatMap(block: (T) -> Flow<R>): Flow<R> = this.flatMapMerge {
-    when(it) {
-        is NetResult.Error -> throw it.exception
-        else -> block(it)
-    }
-}

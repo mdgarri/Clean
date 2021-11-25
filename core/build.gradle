@@ -40,5 +40,6 @@ dependencies {
     debugApi "com.github.chuckerteam.chucker:library:$chucker_version"
     releaseApi "com.github.chuckerteam.chucker:library-no-op:$chucker_version"
 
-
+    //navigation component
+    api "androidx.navigation:navigation-compose:2.4.0-beta02"
 }

@@ -2,5 +2,6 @@ apply plugin: 'com.android.library'
 apply from: '../app/android.gradle'
 
 dependencies {
+    implementation project(":data")
     implementation project(":core")
 }

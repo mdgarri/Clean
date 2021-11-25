@@ -7,6 +7,6 @@ import retrofit2.http.GET
 interface CoinsAPI {
 
     @GET("coins")
-    fun getCoins() : NetResult<CoinResponse>
+    suspend fun getCoins() : NetResult<List<CoinResponse>>
 
 }
