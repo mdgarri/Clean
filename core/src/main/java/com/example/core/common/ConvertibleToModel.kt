@@ -1,5 +1,5 @@
 package com.example.core.common
 
-interface JsonResponse <out T: Any> {
+interface ConvertibleToModel <out T: Any> {
     fun toModel(): T
 }

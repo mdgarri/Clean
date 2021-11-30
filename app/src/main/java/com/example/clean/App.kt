@@ -20,7 +20,8 @@ class App: Application() {
                 commonKoinModule,
                 domainKoinModule,
                 repositoriesKoinModule,
-                viewModelsKoinModule
+                viewModelsKoinModule,
+                dataBasesKoinModule
             )
         }
     }

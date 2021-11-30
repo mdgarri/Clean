@@ -25,13 +25,17 @@ class CoinsViewModel(
 
         viewModelScope.launch {
             //todo launched effect inside the compose
-            getCoinsInteractor().collectNetResult(
+            getCoinsInteractor(true).collectNetResult(
                 actionOnLoading = {
                     loaderState.value = true
                 },
-                actionOnSuccess = {
-                    loaderState.value = false
+                actionOnCache = {
                     coinsState.value = it
+                    loaderState.value = true
+                },
+                actionOnSuccess = {
+                    coinsState.value = it
+                    loaderState.value = false
                 },
                 actionOnError = {
                     loaderState.value = false
@@ -62,6 +66,7 @@ class CoinsViewModel(
     suspend fun <T : Any> Flow<NetResult<T>>.collectNetResult(
         collectorDispatcher: CoroutineDispatcher = Dispatchers.IO,
         actionOnLoading: () -> Unit,
+        actionOnCache: (value: T) -> Unit,
         actionOnSuccess: (value: T) -> Unit,
         actionOnError: (value: NetResult.Error) -> Unit,
     ) =
@@ -71,6 +76,9 @@ class CoinsViewModel(
                     when (result) {
                         is NetResult.Loading -> {
                             actionOnLoading()
+                        }
+                        is NetResult.Cache -> {
+                            actionOnCache(result.data)
                         }
                         is NetResult.Success<T> -> {
                             actionOnSuccess(result.data)

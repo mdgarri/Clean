@@ -1,14 +1,15 @@
-package com.example.data.features.coins.responses
+package com.example.data.features.coins.entites
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.example.core.common.ConvertibleToModel
 import com.example.core.models.Coin
-import com.google.gson.annotations.SerializedName
 
-data class CoinResponse(
+@Entity
+data class CoinEntity(
+    @PrimaryKey(autoGenerate = false)
     val id: String,
-    @SerializedName("is_active")
     val isActive: Boolean,
-    @SerializedName("is_new")
     val isNew: Boolean,
     val name: String,
     val rank: Int,
@@ -23,7 +24,17 @@ data class CoinResponse(
         name = name,
         rank = rank,
         symbol = symbol,
-        type = type
+        type = type,
+    )
+
+    constructor(coin: Coin): this(
+        id = coin.id,
+        isActive = coin.isActive,
+        isNew = coin.isNew,
+        name = coin.name,
+        rank = coin.rank,
+        symbol = coin.symbol,
+        type = coin.type
     )
 
 }

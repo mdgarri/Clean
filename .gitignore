@@ -1,3 +1,4 @@
+# built in ingore rules
 *.iml
 .gradle
 /local.properties
@@ -13,3 +14,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# custom ignore rules
+/app/release
+/.idea/vcs.xml

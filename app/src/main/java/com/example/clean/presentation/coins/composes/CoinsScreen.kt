@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
@@ -27,14 +28,14 @@ fun CoinsScreen(navController: NavController){
 
     Box(modifier = Modifier.fillMaxSize()) {
 
-        CircularProgressIndicator(modifier = Modifier
-            .alpha(if (loaderState.value) 1f else 0f)
-            .align(Alignment.Center))
-
         LazyColumn {
             items(coinsState.value) { coin ->
                 CoinItem(coin)
             }
+        }
+
+        Surface(modifier = Modifier.align(Alignment.Center), color = Color.Transparent) {
+            CircularProgressIndicator(modifier = Modifier.alpha(if (loaderState.value) 1f else 0f))
         }
     }
 }

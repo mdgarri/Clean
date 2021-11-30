@@ -1,4 +1,5 @@
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     def versionNameValue = '1.0'
@@ -35,5 +36,8 @@ android {
 }
 
 dependencies {
+    // Room annotation processor
+    def roomVersion = "2.3.0"
+    kapt "androidx.room:room-compiler:$roomVersion"
 
 }

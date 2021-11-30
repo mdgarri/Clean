@@ -42,4 +42,11 @@ dependencies {
 
     //navigation component
     api "androidx.navigation:navigation-compose:2.4.0-beta02"
+
+    // Room
+    def roomVersion = "2.3.0"
+    api "androidx.room:room-runtime:$roomVersion"
+    // optional - Kotlin Extensions and Coroutines support for Room
+    api("androidx.room:room-ktx:$roomVersion")
+
 }
