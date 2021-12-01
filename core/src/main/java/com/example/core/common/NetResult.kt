@@ -1,6 +1,11 @@
 package com.example.core.common
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 
@@ -182,3 +187,46 @@ inline fun <V1 : Any, reified V2 : Any> NetResult<V1>.flatZip(f: (V1) -> NetResu
             f(data).map { data to (it) }
         }
     }
+
+suspend fun <T : Any> Flow<NetResult<T>>.collectNetResult(
+    collectorDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    actionOnLoading: () -> Unit,
+    actionOnCache: (value: T) -> Unit,
+    actionOnSuccess: (value: T) -> Unit,
+    actionOnError: (value: NetResult.Error) -> Unit,
+) =
+    withContext(collectorDispatcher) {
+        this@collectNetResult.collect { result ->
+            withContext(Dispatchers.Main) {
+                when (result) {
+                    is NetResult.Loading -> {
+                        actionOnLoading()
+                    }
+                    is NetResult.Cache -> {
+                        actionOnCache(result.data)
+                    }
+                    is NetResult.Success<T> -> {
+                        actionOnSuccess(result.data)
+                    }
+                    is NetResult.Error -> {
+                        actionOnError(result)
+                    }
+                }
+            }
+        }
+    }
+
+
+suspend fun <T : Any> FlowCollector<NetResult<T>>.requestTypeHandler(
+    requestType: RequestType,
+    cacheRequest: suspend FlowCollector<NetResult<T>>.() -> Unit = {},
+    apiRequest: suspend FlowCollector<NetResult<T>>.() -> Unit = {}
+) {
+    if (requestType == RequestType.ONLY_CACHE || requestType == RequestType.CACHE_AND_API) {
+        cacheRequest()
+    }
+
+    if (requestType== RequestType.ONLY_API || requestType == RequestType.CACHE_AND_API){
+        apiRequest()
+    }
+}

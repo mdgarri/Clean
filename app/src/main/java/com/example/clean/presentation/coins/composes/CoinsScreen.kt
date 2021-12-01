@@ -15,6 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.clean.navigation.Screens
 import com.example.clean.presentation.coins.CoinsViewModel
 import com.example.core.models.Coin
 import org.koin.androidx.compose.getViewModel
@@ -30,7 +31,7 @@ fun CoinsScreen(navController: NavController){
 
         LazyColumn {
             items(coinsState.value) { coin ->
-                CoinItem(coin)
+                CoinItem(coin, navController)
             }
         }
 
@@ -41,11 +42,14 @@ fun CoinsScreen(navController: NavController){
 }
 
 @Composable
-fun CoinItem(coin: Coin) = Row(
+fun CoinItem(coin: Coin, navController: NavController) = Row(
     Modifier
         .background(MaterialTheme.colors.secondary)
         .fillMaxWidth()
         .wrapContentHeight()
+        .clickable {
+            navController.navigate(Screens.MainFlow.COIN_DETAIL.name + "/" + coin.id)
+        }
 ) {
 
         Text(
@@ -57,9 +61,6 @@ fun CoinItem(coin: Coin) = Row(
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier
                 .weight(1f)
-                .clickable {
-
-                }
         )
 
         Text(

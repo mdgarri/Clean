@@ -7,5 +7,4 @@ import org.koin.dsl.module
 
 val repositoriesKoinModule = module {
     single<CoinsRepository> { CoinsRepository(get<CoinsAPI>(), get<CoinsDataBase>()) }
-
 }

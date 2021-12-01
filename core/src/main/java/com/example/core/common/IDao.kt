@@ -4,14 +4,14 @@ import androidx.room.*
 
 interface IDao <T: Any> {
 
-    fun get(): List<T>
+    suspend fun get(): List<T>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(item: T)
+    suspend fun insert(item: T)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(itemList: List<T>)
+    suspend fun insert(itemList: List<T>)
 
     @Delete
-    fun delete(item: T)
+    suspend fun delete(item: T)
 }
